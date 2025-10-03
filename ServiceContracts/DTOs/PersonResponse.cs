@@ -1,4 +1,5 @@
 using Entities;
+using ServiceContracts.Enums;
 namespace ServiceContracts.DTOs;
 
 /// <summary>
@@ -17,6 +18,21 @@ public class PersonResponse
     public string? Address { get; set; }
     public bool ReceiveNewsLetters { get; set; }
     public double? Age { get; set; }
+
+    public PersonUpdateRequest ToPersonUpdateRequest()
+    {
+        return new PersonUpdateRequest()
+        {
+            PersonId = PersonId,
+            PersonName = PersonName,
+            Email = Email,
+            DateOfBirth = (DateOfBirth == null) ? DateTime.MinValue : DateOfBirth.Value,
+            Gender = (GenderOptions)Enum.Parse(typeof(GenderOptions) , Gender , true),
+            CountryId = CountryId,
+            Address = Address,
+            ReceiveNewsLetters = ReceiveNewsLetters,
+        };
+    }
 
     /// <summary>
     /// Override Equals method to compare two PersonResponse objects based on PersonId
@@ -44,6 +60,11 @@ public class PersonResponse
     override public int GetHashCode()
     {
         return PersonId.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return $"PersonId: {PersonId}, PersonName: {PersonName}";
     }
 
 }
